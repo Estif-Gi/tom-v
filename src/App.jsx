@@ -4,10 +4,15 @@ import './App.css'
 function App() {
   const [yesSize, setYesSize] = useState(1)
   const [angel , setAngel] = useState(0)
+  const [showPopup, setShowPopup] = useState(false)
 
   const handleNoClick = () => {
     setYesSize((prev) => prev + 0.2)
     setAngel((prev) => !prev)
+  }
+
+  const handleYesClick = () => {
+    setShowPopup(true)
   }
 
   return (
@@ -20,7 +25,8 @@ function App() {
 
       <div className="button-container">
         <button
-          className={`yes-btn clicked`}
+          className={`yes-btn clicked happy`}
+          onClick={handleYesClick}
           style={{
             transform: `scale(${yesSize}) rotate(${
               angel === 0 ? "" : angel % 2 === 0 ? '15deg' : '-15deg'
@@ -37,6 +43,16 @@ function App() {
           No I don’t 😢
         </button>
       </div>
+
+      {showPopup && (
+        <div className="popup-overlay" onClick={() => setShowPopup(false)}>
+          <div className="popup" onClick={(e) => e.stopPropagation()}>
+            <img src="/yes.jpg" alt="Yes!" className="popup-img" />
+            <p className="popup-message">You made my day! see on feb/14  💖</p>
+            <button className="close-btn" onClick={() => setShowPopup(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

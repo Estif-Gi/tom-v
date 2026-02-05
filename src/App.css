@@ -90,3 +90,83 @@
   animation: glowBounce 1s ease;
   box-shadow: 0 0 20px 5px rgba(255, 192, 203, 0.9);
 }
+
+/* Happy animation: gentle colorful glow and sparkle without touching transform */
+@keyframes happyGlow {
+  0% {
+    filter: hue-rotate(0deg) saturate(1);
+    box-shadow: 0 0 10px rgba(255, 105, 180, 0.6), 0 0 0 rgba(255,255,255,0);
+    text-shadow: 0 0 0 rgba(255,255,255,0);
+  }
+  50% {
+    filter: hue-rotate(18deg) saturate(1.15) brightness(1.05);
+    box-shadow: 0 0 30px 10px rgba(255, 182, 193, 0.95), 0 0 6px rgba(255,255,255,0.25);
+    text-shadow: 0 4px 12px rgba(255, 235, 245, 0.6);
+  }
+  100% {
+    filter: hue-rotate(0deg) saturate(1);
+    box-shadow: 0 0 10px rgba(255, 105, 180, 0.6), 0 0 0 rgba(255,255,255,0);
+    text-shadow: 0 0 0 rgba(255,255,255,0);
+  }
+}
+
+.yes-btn.happy {
+  animation: happyGlow 2s ease-in-out infinite;
+  border-radius: 14px;
+}
+
+/* Popup styles */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px);
+  z-index: 60;
+  animation: fadeIn 180ms ease;
+}
+
+.popup {
+  background: linear-gradient(180deg, #fff 0%, #fff7fb 100%);
+  padding: 1.25rem;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(9, 10, 11, 0.35);
+  max-width: 420px;
+  width: 92%;
+  text-align: center;
+  transform-origin: center;
+  animation: popIn 360ms cubic-bezier(.2,.9,.25,1);
+}
+
+.popup-img {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 8px 24px rgba(255, 182, 193, 0.25);
+}
+
+.popup-message {
+  font-size: 1.05rem;
+  color: #6b2147;
+  margin: 0.4rem 0 0.9rem;
+}
+
+.close-btn {
+  background: #ff6fb5;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.85); opacity: 0 }
+  60% { transform: scale(1.03); opacity: 1 }
+  100% { transform: scale(1); opacity: 1 }
+}
