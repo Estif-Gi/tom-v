@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import './App.css'
 
 const NO_BTN_AVOID_DISTANCE = 250
@@ -14,6 +14,25 @@ function App() {
   const buttonContainerRef = useRef(null)
   const noButtonRef = useRef(null)
 
+  // Keep No button inside container when window is resized
+  useEffect(() => {
+    const container = buttonContainerRef.current
+    if (!container) return
+    const clampPosition = () => {
+      const rect = container.getBoundingClientRect()
+      const maxLeft = Math.max(0, rect.width - NO_BTN_SIZE.w)
+      const maxTop = Math.max(0, rect.height - NO_BTN_SIZE.h)
+      setNoPosition((pos) => ({
+        left: Math.max(0, Math.min(pos.left, maxLeft)),
+        top: Math.max(0, Math.min(pos.top, maxTop)),
+      }))
+    }
+    const observer = new ResizeObserver(clampPosition)
+    observer.observe(container)
+    clampPosition()
+    return () => observer.disconnect()
+  }, [])
+
   const moveNoButton = useCallback((e) => {
     const container = buttonContainerRef.current
     if (!container) return
@@ -22,6 +41,8 @@ function App() {
     const mouseY = e.clientY - rect.top
     const maxLeft = Math.max(0, rect.width - NO_BTN_SIZE.w)
     const maxTop = Math.max(0, rect.height - NO_BTN_SIZE.h)
+    // Use smaller avoid distance on narrow screens so a valid spot exists
+    const avoidDist = Math.min(NO_BTN_AVOID_DISTANCE, Math.min(rect.width, rect.height) * 0.4)
     let left, top
     for (let i = 0; i < 30; i++) {
       left = Math.random() * maxLeft
@@ -29,7 +50,7 @@ function App() {
       const btnCenterX = left + NO_BTN_SIZE.w / 2
       const btnCenterY = top + NO_BTN_SIZE.h / 2
       const dist = Math.hypot(btnCenterX - mouseX, btnCenterY - mouseY)
-      if (dist >= NO_BTN_AVOID_DISTANCE) break
+      if (dist >= avoidDist) break
     }
     setNoPosition({ left, top })
     setMoveCount((c) => c + 1)
